@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { cn } from '../lib/utils';
+import { Link } from 'react-router-dom';
 
 const navItems = [
   { icon: BarChart3, label: 'Dashboard', path: '/' },
@@ -23,11 +24,11 @@ const navItems = [
 
 const Sidebar: React.FC = () => {
   return (
-    <div className="hidden md:flex h-screen w-64 flex-col bg-white border-r border-gray-200">
-      <div className="flex items-center justify-center h-16 border-b border-gray-200">
+    <div className="hidden md:flex h-screen w-64 flex-col bg-white">
+      <div className="flex items-center justify-center h-16">
         <div className="flex items-center space-x-2">
           <Leaf className="h-8 w-8 text-primary" />
-          <span className="text-xl font-bold">GreenStack<span className="text-primary">AI</span></span>
+          <span className="text-xl font-bold">Git<span className="text-primary">Greener</span></span>
         </div>
       </div>
       

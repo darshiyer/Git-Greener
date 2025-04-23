@@ -1,0 +1,25 @@
+body {
+  background-color: #faf3e0 !important; /* Lighter peach color */
+  color: #2f4f4f; /* Darker green for text */
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.text-primary {
+  color: #2f4f4f; /* Darker green */
+}
+
+.bg-primary {
+  background-color: #2f4f4f; /* Darker green */
+}
+
+.btn-primary {
+  background-color: #2f4f4f; /* Darker green */
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background-color: #1e3d3d; /* Even darker green for hover */
+} 

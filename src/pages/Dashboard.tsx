@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, Cloud, Database, Download, Laptop, Server, Zap } from 'lucide-react';
+import { ArrowRight, Cloud, Database, Download, Laptop, Server, Zap, MessageSquare } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../components/ui/Card';
 import { Badge } from '../components/ui/Badge';
@@ -10,6 +10,7 @@ import EmissionsChart from '../components/EmissionsChart';
 import SuggestionsCard from '../components/SuggestionsCard';
 import MetricsCard from '../components/MetricsCard';
 import HistoricalChart from '../components/HistoricalChart';
+import RecommendationChat from '../components/RecommendationChat';
 import { 
   greenScoreMetrics, 
   emissionSources, 
@@ -19,9 +20,8 @@ import {
 } from '../data/mockData';
 import { formatCO2, formatCO2Equivalent } from '../lib/utils';
 
-
-
 const Dashboard: React.FC = () => {
+  const [isChatOpen, setIsChatOpen] = useState(false);
   const formattedCO2 = formatCO2(optimizationImpact.after.co2Emissions);
   const co2Equivalent = formatCO2Equivalent(optimizationImpact.after.co2Emissions);
   
@@ -72,7 +72,7 @@ const Dashboard: React.FC = () => {
         
         <MetricsCard
           title="Monthly Cost Savings"
-          value={`$${optimizationImpact.savings.costPercentage * 10}`}
+          value={`₹${optimizationImpact.savings.costPercentage * 100}`}
           icon={<Zap className="h-5 w-5 text-warning-500" />}
           change={optimizationImpact.savings.costPercentage}
           trend="down"
@@ -127,9 +127,18 @@ const Dashboard: React.FC = () => {
               <CardTitle>Optimization Suggestions</CardTitle>
               <CardDescription>Actionable insights to reduce emissions</CardDescription>
             </div>
-            <Button variant="ghost" rightIcon={<ArrowRight className="h-4 w-4" />}>
-              View All
-            </Button>
+            <div className="flex items-center gap-2">
+              <Button 
+                variant="ghost" 
+                leftIcon={<MessageSquare className="h-4 w-4" />}
+                onClick={() => setIsChatOpen(true)}
+              >
+                Chat with AI
+              </Button>
+              <Button variant="ghost" rightIcon={<ArrowRight className="h-4 w-4" />}>
+                View All
+              </Button>
+            </div>
           </CardHeader>
           <CardContent>
             <SuggestionsCard suggestions={optimizationSuggestions} />
@@ -178,11 +187,17 @@ const Dashboard: React.FC = () => {
               color="#F59E0B"
               gradient="costGradient"
               title="Cost Savings Trend"
-              valueFormatter={(value) => `$${value}`}
+              valueFormatter={(value) => `₹${value}`}
             />
           </CardContent>
         </Card>
       </div>
+
+      {/* Chat Modal */}
+      <RecommendationChat 
+        isOpen={isChatOpen} 
+        onClose={() => setIsChatOpen(false)} 
+      />
     </div>
   );
 };

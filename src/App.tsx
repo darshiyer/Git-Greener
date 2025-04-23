@@ -7,6 +7,7 @@ import CarbonCalculator from './pages/CarbonCalculator';
 import Compliance from './pages/Compliance';
 import Layout from './components/Layout';
 import Settings from './pages/Settings';
+import { GitHubCallback } from './components/GitHubCallback';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route path="compliance" element={<Compliance />} />
           <Route path="settings" element={<Settings />} />
         </Route>
+        <Route path="/auth/github/callback" element={<GitHubCallback />} />
       </Routes>
     </Router>
   );

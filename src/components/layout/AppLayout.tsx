@@ -31,7 +31,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
         <div className="flex h-16 items-center justify-between px-4 border-b border-gray-200">
           <div className="flex items-center space-x-2">
             <div className="w-8 h-8 rounded-lg bg-gradient-to-r from-primary-500 to-primary-600" />
-            <span className="text-xl font-semibold text-gray-900">GreenStack AI</span>
+            <span className="text-xl font-semibold text-gray-900">GitGreener</span>
           </div>
           <Button
             variant="ghost"

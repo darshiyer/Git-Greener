@@ -1,23 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, Check, CloudCog, PieChart, Server } from 'lucide-react';
-import { resourceUsage } from '../data/mockData';
+import { Check, CloudCog, PieChart, Server, ArrowRight, TrendingDown } from 'lucide-react';
+import { resourceUsage, greenScoreMetrics } from '../data/mockData';
 
 const InfrastructureScanner: React.FC = () => {
-  const [activeResource, setActiveResource] = useState(resourceUsage[0].id);
-  
-  const selectedResource = resourceUsage.find(resource => resource.id === activeResource) || resourceUsage[0];
-  
   const getProviderLogo = (provider: string) => {
     switch (provider.toLowerCase()) {
-      case 'aws':
-        return '🟧'; // Using emoji as placeholder for AWS logo
-      case 'azure':
-        return '🟦'; // Using emoji as placeholder for Azure logo
-      case 'gcp':
-        return '🟩'; // Using emoji as placeholder for GCP logo
-      case 'cloudflare':
-        return '🟪'; // Using emoji as placeholder for Cloudflare logo
+      case 'google cloud':
+        return '🟨'; // Using emoji as placeholder for GCP logo
       default:
         return '☁️'; // Default cloud emoji
     }
@@ -59,108 +49,110 @@ const InfrastructureScanner: React.FC = () => {
         </div>
       </div>
       
-      <div className="card p-6 bg-gradient-to-r from-secondary-600 to-secondary-400 text-white">
-        <div className="flex flex-col md:flex-row md:items-center justify-between">
-          <div>
-            <h2 className="text-xl font-semibold mb-2">Connect Your Cloud Infrastructure</h2>
-            <p className="opacity-80 mb-4 md:mb-0">
-              Link your AWS, Azure, GCP or other cloud providers to get detailed sustainability insights.
-            </p>
-          </div>
-          <button className="btn bg-white text-secondary-600 hover:bg-gray-100">
-            Connect Cloud Account
-          </button>
-        </div>
-      </div>
-      
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-1">
-          <div className="card p-4">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4 px-2">Resources</h3>
-            
-            <nav className="space-y-1">
-              {resourceUsage.map((resource) => (
-                <button
-                  key={resource.id}
-                  className={`w-full flex items-center px-3 py-3 text-sm font-medium rounded-lg transition-colors ${
-                    resource.id === activeResource
-                      ? 'bg-secondary-50 text-secondary-700'
-                      : 'text-gray-700 hover:bg-gray-100'
-                  }`}
-                  onClick={() => setActiveResource(resource.id)}
-                >
-                  <div className="mr-3 flex-shrink-0">{getResourceTypeIcon(resource.type)}</div>
-                  <div className="flex flex-col items-start">
-                    <span>{resource.name}</span>
-                    <span className="text-xs text-gray-500">{resource.provider} • {resource.region}</span>
-                  </div>
-                  <div className="ml-auto">
-                    <span className={`text-sm font-semibold ${getEfficiencyColor(resource.efficiency)}`}>
-                      {resource.efficiency}%
-                    </span>
-                  </div>
-                </button>
-              ))}
-            </nav>
-          </div>
-        </div>
-        
-        <div className="lg:col-span-2">
-          <motion.div 
-            className="card p-6"
-            key={selectedResource.id}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.3 }}
-          >
-            <div className="flex justify-between items-start mb-6">
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        {/* Overall Infrastructure Score */}
+        <div className="lg:col-span-4">
+          <div className="card p-6 bg-gradient-to-r from-secondary-600 to-secondary-400 text-white">
+            <div className="flex items-center justify-between">
               <div>
-                <div className="flex items-center">
-                  <span className="text-2xl mr-2">{getProviderLogo(selectedResource.provider)}</span>
-                  <h2 className="text-xl font-semibold text-gray-900">{selectedResource.name}</h2>
-                </div>
-                <p className="text-sm text-gray-500">
-                  {selectedResource.provider} • {selectedResource.region} • {selectedResource.type}
+                <h2 className="text-2xl font-semibold mb-2">Infrastructure Health Score</h2>
+                <p className="opacity-80">
+                  Your infrastructure is running efficiently with low resource utilization
                 </p>
               </div>
-              
-              <div className="bg-gray-100 rounded-full px-3 py-1 text-sm font-medium">
-                ${selectedResource.cost}/month
-              </div>
+              <div className="text-5xl font-bold">{greenScoreMetrics.infrastructureEfficiency}%</div>
             </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-              <div className="card p-4 bg-gray-50">
-                <h4 className="text-sm font-medium text-gray-500 mb-1">Current Usage</h4>
-                <div className="text-2xl font-bold text-gray-900">{selectedResource.currentUsage}%</div>
-              </div>
-              
-              <div className="card p-4 bg-gray-50">
-                <h4 className="text-sm font-medium text-gray-500 mb-1">Efficiency Score</h4>
-                <div className={`text-2xl font-bold ${getEfficiencyColor(selectedResource.efficiency)}`}>
-                  {selectedResource.efficiency}%
+          </div>
+        </div>
+
+        {/* Resource Cards */}
+        {resourceUsage.map((resource) => (
+          <motion.div
+            key={resource.id}
+            className="card p-6"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <div className="flex items-start justify-between mb-4">
+              <div className="flex items-center">
+                {getResourceTypeIcon(resource.type)}
+                <div className="ml-3">
+                  <h3 className="font-medium text-gray-900">{resource.name}</h3>
+                  <p className="text-sm text-gray-500">{resource.region}</p>
                 </div>
               </div>
-              
-              <div className="card p-4 bg-gray-50">
-                <h4 className="text-sm font-medium text-gray-500 mb-1">CO₂ Emissions</h4>
-                <div className="text-2xl font-bold text-gray-900">{selectedResource.co2Emissions} kg</div>
-              </div>
+              <span className={`text-sm font-semibold ${getEfficiencyColor(resource.efficiency)}`}>
+                {resource.efficiency}% Efficient
+              </span>
             </div>
-            
-            <div>
-              <h3 className="text-lg font-medium text-gray-900 mb-3">Recommendations</h3>
-              
-              <div className="space-y-3">
-                {selectedResource.recommendations.map((recommendation, index) => (
-                  <div key={index} className="flex items-start p-3 bg-success-50 rounded-lg">
-                    <Check className="h-5 w-5 text-success-500 mr-3 mt-0.5" />
-                    <p className="text-sm text-gray-800">{recommendation}</p>
-                  </div>
-                ))}
+
+            <div className="space-y-4">
+              <div>
+                <div className="flex justify-between text-sm mb-1">
+                  <span className="text-gray-500">Current Usage</span>
+                  <span className="font-medium text-gray-900">{resource.currentUsage}%</span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div
+                    className="bg-primary-500 rounded-full h-2"
+                    style={{ width: `${resource.currentUsage}%` }}
+                  />
+                </div>
+              </div>
+
+              <div className="flex justify-between items-center">
+                <div className="text-sm text-gray-500">Monthly Cost</div>
+                <div className="text-sm font-medium">₹{resource.cost}</div>
+              </div>
+
+              <div className="flex justify-between items-center">
+                <div className="text-sm text-gray-500">CO₂ Emissions</div>
+                <div className="text-sm font-medium">{resource.co2Emissions} kg/month</div>
+              </div>
+
+              <div className="border-t pt-4 mt-4">
+                <h4 className="text-sm font-medium text-gray-900 mb-2">Recommendations</h4>
+                <div className="space-y-2">
+                  {resource.recommendations.map((recommendation, index) => (
+                    <div key={index} className="flex items-start text-sm">
+                      <Check className="h-4 w-4 text-success-500 mt-0.5 mr-2 flex-shrink-0" />
+                      <span className="text-gray-600">{recommendation}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </motion.div>
+        ))}
+
+        {/* Summary Card */}
+        <div className="lg:col-span-4">
+          <div className="card p-6">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Infrastructure Summary</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="card bg-gray-50 p-4">
+                <div className="text-sm text-gray-500 mb-1">Total Monthly Cost</div>
+                <div className="text-2xl font-bold text-gray-900">₹{resourceUsage.reduce((acc, r) => acc + r.cost, 0)}</div>
+              </div>
+              <div className="card bg-gray-50 p-4">
+                <div className="text-sm text-gray-500 mb-1">Total CO₂ Emissions</div>
+                <div className="text-2xl font-bold text-gray-900">{resourceUsage.reduce((acc, r) => acc + r.co2Emissions, 0)} kg</div>
+              </div>
+              <div className="card bg-gray-50 p-4">
+                <div className="text-sm text-gray-500 mb-1">Avg Resource Usage</div>
+                <div className="text-2xl font-bold text-gray-900">
+                  {Math.round(resourceUsage.reduce((acc, r) => acc + r.currentUsage, 0) / resourceUsage.length)}%
+                </div>
+              </div>
+              <div className="card bg-gray-50 p-4">
+                <div className="text-sm text-gray-500 mb-1">Avg Efficiency</div>
+                <div className="text-2xl font-bold text-gray-900">
+                  {Math.round(resourceUsage.reduce((acc, r) => acc + r.efficiency, 0) / resourceUsage.length)}%
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

@@ -7,13 +7,11 @@ const Header: React.FC = () => {
   const [searchOpen, setSearchOpen] = useState(false);
   
   return (
-    <header className="bg-white border-b border-gray-200 z-30">
+    <header className="bg-gray-50 z-30">
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex">
-            <h1 className="text-xl font-semibold text-gray-800">
-              GreenStack<span className="text-primary">AI</span>
-            </h1>
+            {/* Removed the 'GreenStack' text */}
           </div>
           
           <div className="flex items-center space-x-4">

@@ -250,7 +250,7 @@ const Settings: React.FC = () => {
                       <div className="flex items-center justify-between">
                         <div>
                           <h4 className="text-sm font-medium text-gray-900">Marketing Updates</h4>
-                          <p className="text-xs text-gray-500">Receive news and updates about GreenStack AI</p>
+                          <p className="text-xs text-gray-500">Receive news and updates about GitGreener</p>
                         </div>
                         <label className="relative inline-flex items-center cursor-pointer">
                           <input type="checkbox" className="sr-only peer" />
@@ -375,7 +375,7 @@ const Settings: React.FC = () => {
                     <div className="flex items-center justify-between mb-4">
                       <div>
                         <h4 className="text-sm font-medium text-gray-900">API Keys</h4>
-                        <p className="text-xs text-gray-500">Manage API access to your GreenStack AI data</p>
+                        <p className="text-xs text-gray-500">Manage API access to your GitGreener data</p>
                       </div>
                       <button className="btn btn-secondary text-sm">
                         Generate API Key

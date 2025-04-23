@@ -1,13 +1,36 @@
 import React, { useState } from 'react';
 import { DownloadCloud, FileText, Filter, Plus } from 'lucide-react';
 import { complianceReports } from '../data/mockData';
+import { generateReport } from '../services/reportGenerator';
 
 const Compliance: React.FC = () => {
   const [activeFilter, setActiveFilter] = useState<string>('all');
+  const [isGenerating, setIsGenerating] = useState<boolean>(false);
   
   const filteredReports = activeFilter === 'all' 
     ? complianceReports 
     : complianceReports.filter(report => report.type.toLowerCase() === activeFilter.toLowerCase());
+  
+  const handleGenerateReport = async () => {
+    setIsGenerating(true);
+    try {
+      await generateReport();
+    } catch (error) {
+      console.error('Failed to generate report:', error);
+      // TODO: Add error notification
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  const handleDownloadReport = async (reportId: string) => {
+    try {
+      await generateReport(); // In the future, this could take report data as a parameter
+    } catch (error) {
+      console.error('Failed to download report:', error);
+      // TODO: Add error notification
+    }
+  };
   
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -32,9 +55,22 @@ const Compliance: React.FC = () => {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-semibold text-gray-900">Compliance Reports</h1>
-        <button className="btn btn-primary">
-          <Plus className="h-4 w-4 mr-2" />
-          Generate New Report
+        <button 
+          className={`btn btn-primary ${isGenerating ? 'opacity-75 cursor-not-allowed' : ''}`}
+          onClick={handleGenerateReport}
+          disabled={isGenerating}
+        >
+          {isGenerating ? (
+            <>
+              <div className="animate-spin h-4 w-4 mr-2 border-2 border-white border-t-transparent rounded-full" />
+              Generating...
+            </>
+          ) : (
+            <>
+              <Plus className="h-4 w-4 mr-2" />
+              Generate New Report
+            </>
+          )}
         </button>
       </div>
       
@@ -141,10 +177,16 @@ const Compliance: React.FC = () => {
                 </td>
                 <td className="py-4 px-4 text-sm text-gray-500">
                   <div className="flex space-x-2">
-                    <button className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded">
+                    <button 
+                      className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded"
+                      onClick={() => handleDownloadReport(report.id)}
+                    >
                       <FileText className="h-4 w-4" />
                     </button>
-                    <button className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded">
+                    <button 
+                      className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded"
+                      onClick={() => handleDownloadReport(report.id)}
+                    >
                       <DownloadCloud className="h-4 w-4" />
                     </button>
                   </div>
